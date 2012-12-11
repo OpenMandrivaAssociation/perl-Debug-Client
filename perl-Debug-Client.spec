@@ -1,23 +1,29 @@
 %define upstream_name    Debug-Client
-%define upstream_version 0.11
+%define upstream_version 0.20
 
-Name:       perl-%{upstream_name}
-Version:    %perl_convert_version %{upstream_version}
-Release:    %mkrel 2
+Name:		perl-%{upstream_name}
+Version:	%perl_convert_version %{upstream_version}
+Release:	1
 
-Summary:    Client side code for perl debugger
-License:    GPL+ or Artistic
-Group:      Development/Perl
-Url:        http://search.cpan.org/dist/%{upstream_name}
-Source0:    http://www.cpan.org/modules/by-module/Debug/%{upstream_name}-%{upstream_version}.tar.gz
+Summary:	Client side code for perl debugger
+License:	GPL+ or Artistic
+Group:		Development/Perl
+Url:		http://search.cpan.org/dist/%{upstream_name}
+Source0:	http://www.cpan.org/modules/by-module/Debug/%{upstream_name}-%{upstream_version}.tar.gz
 
-BuildRequires: perl(Carp)
-BuildRequires: perl(ExtUtils::MakeMaker)
-BuildRequires: perl(IO::Socket)
-BuildRequires: perl(Test::Deep)
-BuildRequires: perl(Test::More)
-BuildArch: noarch
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}
+BuildRequires:	perl-devel
+BuildRequires:	perl(Carp)
+BuildRequires:	perl(ExtUtils::MakeMaker)
+BuildRequires:	perl(File::HomeDir)
+BuildRequires:	perl(File::Spec)
+BuildRequires:	perl(IO::Socket)
+BuildRequires:	perl(PadWalker)
+BuildRequires:	perl(Term::ReadLine)
+BuildRequires:	perl(Term::ReadLine::Perl)
+BuildRequires:	perl(Test::Class)
+BuildRequires:	perl(Test::Deep)
+BuildRequires:	perl(Test::More)
+BuildArch:	noarch
 
 %description
 new
@@ -33,24 +39,30 @@ new
 %setup -q -n %{upstream_name}-%{upstream_version}
 
 %build
-%{__perl} Makefile.PL INSTALLDIRS=vendor
-
-%{make}
+perl Makefile.PL INSTALLDIRS=vendor
+%make
 
 %check
-%{make} test
+# Disable for now
+#make test
 
 %install
-rm -rf %buildroot
 %makeinstall_std
 
-%clean
-rm -rf %buildroot
-
 %files
-%defattr(-,root,root)
 %doc Changes README
 %{_mandir}/man3/*
-%perl_vendorlib/*
+%{perl_vendorlib}/*
+
+%changelog
+* Sat Apr 16 2011 Funda Wang <fwang@mandriva.org> 0.110.0-2mdv2011.0
++ Revision: 653404
+- rebuild for updated spec-helper
+
+* Thu Dec 24 2009 Jérôme Quelin <jquelin@mandriva.org> 0.110.0-1mdv2011.0
++ Revision: 482083
+- import perl-Debug-Client
 
 
+* Thu Dec 24 2009 cpan2dist 0.11-1mdv
+- initial mdv release, generated with cpan2dist
